@@ -1,0 +1,91 @@
+name: Update iCloud Formula
+
+on:
+  repository_dispatch:
+    types: [new-icloud-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to update (e.g., 0.1.0). If empty, uses latest release'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest release info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Using specified version: $VERSION"
+          else
+            # Get latest release version from the icloud-cli repository
+            VERSION=$(gh release list --repo jingkaihe/icloud-cli --limit 1 --json tagName --jq '.[0].tagName' | sed 's/^v//')
+            echo "Using latest version: $VERSION"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Latest release version: $VERSION"
+
+      - name: Get release asset checksums
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching checksums for version v$VERSION..."
+          
+          # Get all asset digests from the release
+          digests=$(gh api repos/jingkaihe/icloud-cli/releases/tags/v$VERSION --jq '.assets[] | "\(.name): \(.digest)"')
+          echo "$digests"
+          
+          # Extract SHA256 for each platform (digest format: sha256:hash)
+          for asset in icloud-darwin-amd64 icloud-darwin-arm64 icloud-linux-amd64 icloud-linux-arm64; do
+            sha256=$(echo "$digests" | grep "^$asset:" | sed 's/.*sha256://')
+            if [ -z "$sha256" ]; then
+              echo "Failed to get SHA256 for $asset"
+              exit 1
+            fi
+            env_var_name=$(echo "$asset" | tr '[:lower:]-' '[:upper:]_')
+            echo "${env_var_name}_SHA256=$sha256" >> $GITHUB_ENV
+            echo "SHA256 for $asset: $sha256"
+          done
+
+      - name: Generate formula from template
+        run: |
+          # Read the template
+          template=$(cat icloud-template.rb)
+          
+          # Replace placeholders with actual values
+          formula=$(echo "$template" | sed \
+            -e "s/{{VERSION}}/$VERSION/g" \
+            -e "s/{{SHA256_DARWIN_ARM64}}/$ICLOUD_DARWIN_ARM64_SHA256/g" \
+            -e "s/{{SHA256_DARWIN_AMD64}}/$ICLOUD_DARWIN_AMD64_SHA256/g" \
+            -e "s/{{SHA256_LINUX_ARM64}}/$ICLOUD_LINUX_ARM64_SHA256/g" \
+            -e "s/{{SHA256_LINUX_AMD64}}/$ICLOUD_LINUX_AMD64_SHA256/g")
+          
+          # Write the formula
+          echo "$formula" > Formula/icloud.rb
+          
+          echo "Generated formula for version $VERSION"
+          cat Formula/icloud.rb
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add Formula/icloud.rb
+          
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update icloud formula to version $VERSION"
+            git push
+            echo "Formula updated to version $VERSION"
+          fi
