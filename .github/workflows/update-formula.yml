@@ -34,30 +34,26 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Latest release version: $VERSION"
 
-      - name: Download release assets and calculate checksums
+      - name: Get release asset checksums
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Create temporary directory for downloads
-          mkdir -p temp_downloads
-          cd temp_downloads
-
-          # Download binaries for all platforms
-          echo "Downloading waitrose binaries for version v$VERSION..."
+          echo "Fetching checksums for version v$VERSION..."
           
+          # Get all asset digests from the release
+          digests=$(gh api repos/jingkaihe/waitrose/releases/tags/v$VERSION --jq '.assets[] | "\(.name): \(.digest)"')
+          echo "$digests"
+          
+          # Extract SHA256 for each platform (digest format: sha256:hash)
           for asset in waitrose-darwin-amd64 waitrose-darwin-arm64 waitrose-linux-amd64 waitrose-linux-arm64; do
-            echo "Downloading $asset..."
-            if gh release download "v$VERSION" --repo jingkaihe/waitrose --pattern "$asset"; then
-              echo "Downloaded $asset successfully"
-              # Calculate SHA256
-              sha256=$(sha256sum "$asset" | cut -d' ' -f1)
-              env_var_name=$(echo "$asset" | tr '[:lower:]-' '[:upper:]_')
-              echo "${env_var_name}_SHA256=$sha256" >> $GITHUB_ENV
-              echo "SHA256 for $asset: $sha256"
-            else
-              echo "Failed to download $asset"
+            sha256=$(echo "$digests" | grep "^$asset:" | sed 's/.*sha256://')
+            if [ -z "$sha256" ]; then
+              echo "Failed to get SHA256 for $asset"
               exit 1
             fi
+            env_var_name=$(echo "$asset" | tr '[:lower:]-' '[:upper:]_')
+            echo "${env_var_name}_SHA256=$sha256" >> $GITHUB_ENV
+            echo "SHA256 for $asset: $sha256"
           done
 
       - name: Generate formula from template
@@ -94,5 +90,4 @@ jobs:
             echo "Formula updated to version $VERSION"
           fi
 
-      - name: Clean up
-        run: rm -rf temp_downloads
+
