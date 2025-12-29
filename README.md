@@ -11,6 +11,7 @@ brew tap jingkaihe/essentials
 # Install tools
 brew install waitrose
 brew install icloud
+brew install google-workspace-mcp
 ```
 
 Or install directly:
@@ -18,9 +19,21 @@ Or install directly:
 ```bash
 brew install jingkaihe/essentials/waitrose
 brew install jingkaihe/essentials/icloud
+brew install jingkaihe/essentials/google-workspace-mcp
 ```
 
 ## Available Formulas
+
+### google-workspace-mcp
+
+MCP server for Google Workspace services.
+
+- **Repository**: https://github.com/jingkaihe/google-workspace-mcp
+- **Usage**:
+  ```bash
+  google-workspace-mcp --help
+  google-workspace-mcp version
+  ```
 
 ### waitrose
 
@@ -54,7 +67,7 @@ To update to the latest versions:
 
 ```bash
 brew update
-brew upgrade waitrose icloud
+brew upgrade waitrose icloud google-workspace-mcp
 ```
 
 ## About
