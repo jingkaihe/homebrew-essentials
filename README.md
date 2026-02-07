@@ -9,6 +9,7 @@ This is the official Homebrew tap for essential CLI tools by [@jingkaihe](https:
 brew tap jingkaihe/essentials
 
 # Install tools
+brew install matchlock
 brew install waitrose
 brew install icloud
 brew install google-workspace-mcp
@@ -17,12 +18,25 @@ brew install google-workspace-mcp
 Or install directly:
 
 ```bash
+brew install jingkaihe/essentials/matchlock
 brew install jingkaihe/essentials/waitrose
 brew install jingkaihe/essentials/icloud
 brew install jingkaihe/essentials/google-workspace-mcp
 ```
 
 ## Available Formulas
+
+### matchlock
+
+Lightweight micro-VM sandbox for running AI agents securely.
+
+- **Repository**: https://github.com/jingkaihe/matchlock
+- **Usage**:
+  ```bash
+  matchlock --help
+  matchlock version
+  matchlock run --image alpine:latest echo 'Hello from matchlock'
+  ```
 
 ### google-workspace-mcp
 
@@ -67,7 +81,7 @@ To update to the latest versions:
 
 ```bash
 brew update
-brew upgrade waitrose icloud google-workspace-mcp
+brew upgrade matchlock waitrose icloud google-workspace-mcp
 ```
 
 ## About
