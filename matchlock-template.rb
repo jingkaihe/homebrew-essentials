@@ -74,8 +74,14 @@ class Matchlock < Formula
     end
   end
 
+  def post_install
+    if OS.linux?
+      system "sudo", bin/"matchlock", "setup", "linux"
+    end
+  end
+
   def caveats
-    <<~EOS
+    s = <<~EOS
       Guest agent binaries have been installed to:
         #{libexec}
 
@@ -83,6 +89,14 @@ class Matchlock < Formula
         export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
         export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
     EOS
+    if OS.linux?
+      s += <<~EOS
+
+        If the post-install setup did not complete, run manually:
+          sudo #{bin}/matchlock setup linux
+      EOS
+    end
+    s
   end
 
   test do
