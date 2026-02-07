@@ -8,10 +8,8 @@ class Matchlock < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      resource "matchlock-bin" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-darwin-arm64"
-        sha256 "{{SHA256_MATCHLOCK_DARWIN_ARM64}}"
-      end
+      url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-darwin-arm64"
+      sha256 "{{SHA256_MATCHLOCK_DARWIN_ARM64}}"
 
       resource "guest-agent" do
         url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-arm64"
@@ -27,10 +25,8 @@ class Matchlock < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      resource "matchlock-bin" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-arm64"
-        sha256 "{{SHA256_MATCHLOCK_LINUX_ARM64}}"
-      end
+      url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-arm64"
+      sha256 "{{SHA256_MATCHLOCK_LINUX_ARM64}}"
 
       resource "guest-agent" do
         url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-arm64"
@@ -42,10 +38,8 @@ class Matchlock < Formula
         sha256 "{{SHA256_GUEST_FUSED_LINUX_ARM64}}"
       end
     else
-      resource "matchlock-bin" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-amd64"
-        sha256 "{{SHA256_MATCHLOCK_LINUX_AMD64}}"
-      end
+      url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-amd64"
+      sha256 "{{SHA256_MATCHLOCK_LINUX_AMD64}}"
 
       resource "guest-agent" do
         url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-amd64"
@@ -60,7 +54,7 @@ class Matchlock < Formula
   end
 
   def install
-    resource("matchlock-bin").stage { bin.install Dir["matchlock*"].first => "matchlock" }
+    bin.install Dir["matchlock*"].first => "matchlock"
     resource("guest-agent").stage { bin.install Dir["guest-agent*"].first => "guest-agent" }
     resource("guest-fused").stage { bin.install Dir["guest-fused*"].first => "guest-fused" }
 
