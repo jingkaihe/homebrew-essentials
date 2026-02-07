@@ -55,8 +55,8 @@ class Matchlock < Formula
 
   def install
     bin.install Dir["matchlock*"].first => "matchlock"
-    resource("guest-agent").stage { bin.install Dir["guest-agent*"].first => "guest-agent" }
-    resource("guest-fused").stage { bin.install Dir["guest-fused*"].first => "guest-fused" }
+    resource("guest-agent").stage { libexec.install Dir["guest-agent*"].first => "guest-agent" }
+    resource("guest-fused").stage { libexec.install Dir["guest-fused*"].first => "guest-fused" }
 
     if OS.mac?
       entitlements = buildpath/"matchlock.entitlements"
@@ -72,6 +72,17 @@ class Matchlock < Formula
       XML
       system "codesign", "--entitlements", entitlements, "-f", "-s", "-", bin/"matchlock"
     end
+  end
+
+  def caveats
+    <<~EOS
+      Guest agent binaries have been installed to:
+        #{libexec}
+
+      Add the following to your shell profile (~/.zshrc or ~/.bashrc):
+        export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
+        export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
+    EOS
   end
 
   test do
