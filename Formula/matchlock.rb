@@ -57,6 +57,9 @@ class Matchlock < Formula
     libexec.install Dir["matchlock*"].first => "matchlock"
     resource("guest-agent").stage { libexec.install Dir["guest-agent*"].first => "guest-agent" }
     resource("guest-fused").stage { libexec.install Dir["guest-fused*"].first => "guest-fused" }
+    chmod 0755, libexec/"matchlock"
+    chmod 0755, libexec/"guest-agent"
+    chmod 0755, libexec/"guest-fused"
 
     if OS.mac?
       entitlements = buildpath/"matchlock.entitlements"
