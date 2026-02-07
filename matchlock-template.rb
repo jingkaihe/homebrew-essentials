@@ -54,7 +54,7 @@ class Matchlock < Formula
   end
 
   def install
-    bin.install Dir["matchlock*"].first => "matchlock"
+    libexec.install Dir["matchlock*"].first => "matchlock"
     resource("guest-agent").stage { libexec.install Dir["guest-agent*"].first => "guest-agent" }
     resource("guest-fused").stage { libexec.install Dir["guest-fused*"].first => "guest-fused" }
 
@@ -70,8 +70,15 @@ class Matchlock < Formula
         </dict>
         </plist>
       XML
-      system "codesign", "--entitlements", entitlements, "-f", "-s", "-", bin/"matchlock"
+      system "codesign", "--entitlements", entitlements, "-f", "-s", "-", libexec/"matchlock"
     end
+
+    (bin/"matchlock").write <<~SH
+      #!/bin/bash
+      export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
+      export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
+      exec "#{libexec}/matchlock" "$@"
+    SH
   end
 
   def post_install
@@ -81,17 +88,9 @@ class Matchlock < Formula
   end
 
   def caveats
-    s = <<~EOS
-      Guest agent binaries have been installed to:
-        #{libexec}
-
-      Add the following to your shell profile (~/.zshrc or ~/.bashrc):
-        export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
-        export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
-    EOS
+    s = ""
     if OS.linux?
       s += <<~EOS
-
         If the post-install setup did not complete, run manually:
           sudo #{bin}/matchlock setup linux
       EOS
