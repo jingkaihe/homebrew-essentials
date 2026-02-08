@@ -76,8 +76,10 @@ class Matchlock < Formula
       system "codesign", "--entitlements", entitlements, "-f", "-s", "-", libexec/"matchlock"
     end
 
+    e2fsprogs = Formula["e2fsprogs"]
     (bin/"matchlock").write <<~SH
       #!/bin/bash
+      export PATH="#{e2fsprogs.opt_bin}:#{e2fsprogs.opt_sbin}:$PATH"
       export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
       export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
       exec "#{libexec}/matchlock" "$@"
