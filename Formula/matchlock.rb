@@ -1,54 +1,54 @@
 class Matchlock < Formula
   desc "Lightweight micro-VM sandbox for running AI agents securely"
   homepage "https://github.com/jingkaihe/matchlock"
-  version "0.1.11"
+  version "0.1.12"
   license "MIT"
 
   depends_on "e2fsprogs"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/matchlock-darwin-arm64"
-      sha256 "01290ebc53fc0425674a8b992b29a0558da64badbc9f031c3e1c2ef204db69b1"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/matchlock-darwin-arm64"
+      sha256 "8db2d8474e6f61e9d8037e3ad6bc09aed2ae026f30e412fb9749d6c89989c277"
 
       resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-agent-linux-arm64"
-        sha256 "0c96358464c85d65eb0c06382c66a6f8e96ab26f8acd0a54472d1f09f5178fed"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-agent-linux-arm64"
+        sha256 "76963f0b2af44d0cee028404b3c11f60aae207e5e3891bccb4f63b5c7dcb9f83"
       end
 
       resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-fused-linux-arm64"
-        sha256 "3d8b6df5ab7a943a59f7acc496471a823b57cdcfad936254f6099e08262cda68"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-fused-linux-arm64"
+        sha256 "58cf561ce22f2515e023385def4c2b007e9aaa8661754a57d4012004b92515e5"
       end
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/matchlock-linux-arm64"
-      sha256 "7f941815fe71c7dc72ba14c29d4f06a9329c48a15e23db866f8b685adc2b442e"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/matchlock-linux-arm64"
+      sha256 "f6c11f1342b11da9901dcd2f2815f57725df8065ba2ff677f265c88c95410d82"
 
       resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-agent-linux-arm64"
-        sha256 "0c96358464c85d65eb0c06382c66a6f8e96ab26f8acd0a54472d1f09f5178fed"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-agent-linux-arm64"
+        sha256 "76963f0b2af44d0cee028404b3c11f60aae207e5e3891bccb4f63b5c7dcb9f83"
       end
 
       resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-fused-linux-arm64"
-        sha256 "3d8b6df5ab7a943a59f7acc496471a823b57cdcfad936254f6099e08262cda68"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-fused-linux-arm64"
+        sha256 "58cf561ce22f2515e023385def4c2b007e9aaa8661754a57d4012004b92515e5"
       end
     else
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/matchlock-linux-amd64"
-      sha256 "1140cba63902426f683f724437cdb5dfce3be466dde3ba0c118aa40e72e70950"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/matchlock-linux-amd64"
+      sha256 "e365258c2ae117f25dccf02364031d9ad1a514b964b8f1a66bad1fa8126988b5"
 
       resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-agent-linux-amd64"
-        sha256 "3eb33ca8a5d1ede5530843720b867803e869ba5dbe61315bb445544cac06efb6"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-agent-linux-amd64"
+        sha256 "7ac7cb705ca671c1eff2e3157f7bc58a89ec4697e182e9d33a9664df10e55df9"
       end
 
       resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.11/guest-fused-linux-amd64"
-        sha256 "50814be047dab16914e6a72c139c89777b62dfdf9ecfe375618d12ac89ddc74e"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.12/guest-fused-linux-amd64"
+        sha256 "e6173b62085060215afc9ba4b7c6f3d2ef26f043ce44d644f56852fe8ba4fb79"
       end
     end
   end
