@@ -11,14 +11,9 @@ class Matchlock < Formula
       url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-darwin-arm64"
       sha256 "{{SHA256_MATCHLOCK_DARWIN_ARM64}}"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-arm64"
-        sha256 "{{SHA256_GUEST_AGENT_LINUX_ARM64}}"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-fused-linux-arm64"
-        sha256 "{{SHA256_GUEST_FUSED_LINUX_ARM64}}"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-init-linux-arm64"
+        sha256 "{{SHA256_GUEST_INIT_LINUX_ARM64}}"
       end
     end
   end
@@ -28,38 +23,26 @@ class Matchlock < Formula
       url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-arm64"
       sha256 "{{SHA256_MATCHLOCK_LINUX_ARM64}}"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-arm64"
-        sha256 "{{SHA256_GUEST_AGENT_LINUX_ARM64}}"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-fused-linux-arm64"
-        sha256 "{{SHA256_GUEST_FUSED_LINUX_ARM64}}"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-init-linux-arm64"
+        sha256 "{{SHA256_GUEST_INIT_LINUX_ARM64}}"
       end
     else
       url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/matchlock-linux-amd64"
       sha256 "{{SHA256_MATCHLOCK_LINUX_AMD64}}"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-agent-linux-amd64"
-        sha256 "{{SHA256_GUEST_AGENT_LINUX_AMD64}}"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-fused-linux-amd64"
-        sha256 "{{SHA256_GUEST_FUSED_LINUX_AMD64}}"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v{{VERSION}}/guest-init-linux-amd64"
+        sha256 "{{SHA256_GUEST_INIT_LINUX_AMD64}}"
       end
     end
   end
 
   def install
     libexec.install Dir["matchlock*"].first => "matchlock"
-    resource("guest-agent").stage { libexec.install Dir["guest-agent*"].first => "guest-agent" }
-    resource("guest-fused").stage { libexec.install Dir["guest-fused*"].first => "guest-fused" }
+    resource("guest-init").stage { libexec.install Dir["guest-init*"].first => "guest-init" }
     chmod 0755, libexec/"matchlock"
-    chmod 0755, libexec/"guest-agent"
-    chmod 0755, libexec/"guest-fused"
+    chmod 0755, libexec/"guest-init"
 
     if OS.mac?
       entitlements = buildpath/"matchlock.entitlements"
@@ -80,8 +63,7 @@ class Matchlock < Formula
     (bin/"matchlock").write <<~SH
       #!/bin/bash
       export PATH="#{e2fsprogs.opt_bin}:#{e2fsprogs.opt_sbin}:$PATH"
-      export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
-      export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
+      export MATCHLOCK_GUEST_INIT="#{libexec}/guest-init"
       exec "#{libexec}/matchlock" "$@"
     SH
   end

@@ -42,7 +42,7 @@ jobs:
           digests=$(gh api repos/jingkaihe/matchlock/releases/tags/v$VERSION --jq '.assets[] | "\(.name): \(.digest)"')
           echo "$digests"
           
-          for asset in matchlock-darwin-arm64 matchlock-linux-amd64 matchlock-linux-arm64 guest-agent-linux-amd64 guest-agent-linux-arm64 guest-fused-linux-amd64 guest-fused-linux-arm64; do
+          for asset in matchlock-darwin-arm64 matchlock-linux-amd64 matchlock-linux-arm64 guest-init-linux-amd64 guest-init-linux-arm64; do
             sha256=$(echo "$digests" | grep "^$asset:" | sed 's/.*sha256://')
             if [ -z "$sha256" ]; then
               echo "Failed to get SHA256 for $asset"
@@ -62,10 +62,8 @@ jobs:
             -e "s/{{SHA256_MATCHLOCK_DARWIN_ARM64}}/$MATCHLOCK_DARWIN_ARM64_SHA256/g" \
             -e "s/{{SHA256_MATCHLOCK_LINUX_AMD64}}/$MATCHLOCK_LINUX_AMD64_SHA256/g" \
             -e "s/{{SHA256_MATCHLOCK_LINUX_ARM64}}/$MATCHLOCK_LINUX_ARM64_SHA256/g" \
-            -e "s/{{SHA256_GUEST_AGENT_LINUX_AMD64}}/$GUEST_AGENT_LINUX_AMD64_SHA256/g" \
-            -e "s/{{SHA256_GUEST_AGENT_LINUX_ARM64}}/$GUEST_AGENT_LINUX_ARM64_SHA256/g" \
-            -e "s/{{SHA256_GUEST_FUSED_LINUX_AMD64}}/$GUEST_FUSED_LINUX_AMD64_SHA256/g" \
-            -e "s/{{SHA256_GUEST_FUSED_LINUX_ARM64}}/$GUEST_FUSED_LINUX_ARM64_SHA256/g")
+            -e "s/{{SHA256_GUEST_INIT_LINUX_AMD64}}/$GUEST_INIT_LINUX_AMD64_SHA256/g" \
+            -e "s/{{SHA256_GUEST_INIT_LINUX_ARM64}}/$GUEST_INIT_LINUX_ARM64_SHA256/g")
           
           echo "$formula" > Formula/matchlock.rb
           
