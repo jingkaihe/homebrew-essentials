@@ -1,65 +1,48 @@
 class Matchlock < Formula
   desc "Lightweight micro-VM sandbox for running AI agents securely"
   homepage "https://github.com/jingkaihe/matchlock"
-  version "0.1.19"
+  version "0.1.20"
   license "MIT"
 
   depends_on "e2fsprogs"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/matchlock-darwin-arm64"
-      sha256 "db20217c63632ba351453ccc3e53370e5e562adcaf9015ebabe52abe9305988f"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/matchlock-darwin-arm64"
+      sha256 "81e4341bba83976bea1d7db6a3487dd541ca9d6b018a5bed9c37406af0db7990"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-agent-linux-arm64"
-        sha256 "4f216b0b060ee6be3bf4d6b405a63b820de5a83ef273cee84488b9d7fa925fab"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-fused-linux-arm64"
-        sha256 "8cd9b2c9aa6702b40bea5e265d965f07734ecbfda9c9358d4e0818838df45cdf"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/guest-init-linux-arm64"
+        sha256 "550c41ef5c523f22e8a37e29e5b4d5d485a3cfdfce894802c7d831e3bf7a9731"
       end
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/matchlock-linux-arm64"
-      sha256 "789a8e5661c916951f00314454aedad6ffb2119eacf806e54e94c1a1917d8075"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/matchlock-linux-arm64"
+      sha256 "1ebcc6fa13f837507cdaa9a7485d4dd881cec056deccda2ddc3f5613ef4ae401"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-agent-linux-arm64"
-        sha256 "4f216b0b060ee6be3bf4d6b405a63b820de5a83ef273cee84488b9d7fa925fab"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-fused-linux-arm64"
-        sha256 "8cd9b2c9aa6702b40bea5e265d965f07734ecbfda9c9358d4e0818838df45cdf"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/guest-init-linux-arm64"
+        sha256 "550c41ef5c523f22e8a37e29e5b4d5d485a3cfdfce894802c7d831e3bf7a9731"
       end
     else
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/matchlock-linux-amd64"
-      sha256 "caa7a319b7722925f55a928a1656b4181dc6b3d210df707e35e701b58fdbd802"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/matchlock-linux-amd64"
+      sha256 "a988c12b08e22e9a255e684ed72255ab20e979cab792772795812f32e77f9870"
 
-      resource "guest-agent" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-agent-linux-amd64"
-        sha256 "f22fea9918f018ee48805fec1a1b5f1114986918c3798233e994186a201bcc98"
-      end
-
-      resource "guest-fused" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.19/guest-fused-linux-amd64"
-        sha256 "dbe2fb4976161ef20134bd7cbfa737130f9cf17d8ea68288b21b5799f212aee6"
+      resource "guest-init" do
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.1.20/guest-init-linux-amd64"
+        sha256 "8024dfcdeb84753198955994a8e0dcd6bbf8b4bc465be057924ea460e0853af3"
       end
     end
   end
 
   def install
     libexec.install Dir["matchlock*"].first => "matchlock"
-    resource("guest-agent").stage { libexec.install Dir["guest-agent*"].first => "guest-agent" }
-    resource("guest-fused").stage { libexec.install Dir["guest-fused*"].first => "guest-fused" }
+    resource("guest-init").stage { libexec.install Dir["guest-init*"].first => "guest-init" }
     chmod 0755, libexec/"matchlock"
-    chmod 0755, libexec/"guest-agent"
-    chmod 0755, libexec/"guest-fused"
+    chmod 0755, libexec/"guest-init"
 
     if OS.mac?
       entitlements = buildpath/"matchlock.entitlements"
@@ -80,8 +63,7 @@ class Matchlock < Formula
     (bin/"matchlock").write <<~SH
       #!/bin/bash
       export PATH="#{e2fsprogs.opt_bin}:#{e2fsprogs.opt_sbin}:$PATH"
-      export MATCHLOCK_GUEST_AGENT="#{libexec}/guest-agent"
-      export MATCHLOCK_GUEST_FUSED="#{libexec}/guest-fused"
+      export MATCHLOCK_GUEST_INIT="#{libexec}/guest-init"
       exec "#{libexec}/matchlock" "$@"
     SH
   end
