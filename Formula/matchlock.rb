@@ -5,6 +5,7 @@ class Matchlock < Formula
   license "MIT"
 
   depends_on "e2fsprogs"
+  depends_on "erofs-utils"
 
   on_macos do
     if Hardware::CPU.arm?
@@ -60,9 +61,10 @@ class Matchlock < Formula
     end
 
     e2fsprogs = Formula["e2fsprogs"]
+    erofs_utils = Formula["erofs-utils"]
     (bin/"matchlock").write <<~SH
       #!/bin/bash
-      export PATH="#{e2fsprogs.opt_bin}:#{e2fsprogs.opt_sbin}:$PATH"
+      export PATH="#{e2fsprogs.opt_bin}:#{e2fsprogs.opt_sbin}:#{erofs_utils.opt_bin}:$PATH"
       export MATCHLOCK_GUEST_INIT="#{libexec}/guest-init"
       exec "#{libexec}/matchlock" "$@"
     SH
