@@ -1,7 +1,7 @@
 class Matchlock < Formula
   desc "Lightweight micro-VM sandbox for running AI agents securely"
   homepage "https://github.com/jingkaihe/matchlock"
-  version "0.2.1"
+  version "0.2.5"
   license "MIT"
 
   depends_on "e2fsprogs"
@@ -9,32 +9,32 @@ class Matchlock < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/matchlock-darwin-arm64"
-      sha256 "8dce726791663d3307224d9b772bca4f700fb012ab74a3d67c638ae83369c2f1"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/matchlock-darwin-arm64"
+      sha256 "b91f7717d3df7a31df340dba361cb39d1042bd63daf0c18d7207fd2d2f08aeb7"
 
       resource "guest-init" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/guest-init-linux-arm64"
-        sha256 "50bb4f6bbd8975be260914accac9a9c4a25cdbcce287ed80add77652f0254267"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/guest-init-linux-arm64"
+        sha256 "0fac653af5dcddd83f2684f5071229496f47e3a777baccd88c0208b65bde4eb0"
       end
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/matchlock-linux-arm64"
-      sha256 "c0cd9cb2dbc11bafeb32c4cd67d8513d48a4e58e479d0ca6c9f6072ccf6cb782"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/matchlock-linux-arm64"
+      sha256 "3c7204252586d02664a75b205080b4159bf8d4da47b245edf01861eee15069a3"
 
       resource "guest-init" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/guest-init-linux-arm64"
-        sha256 "50bb4f6bbd8975be260914accac9a9c4a25cdbcce287ed80add77652f0254267"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/guest-init-linux-arm64"
+        sha256 "0fac653af5dcddd83f2684f5071229496f47e3a777baccd88c0208b65bde4eb0"
       end
     else
-      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/matchlock-linux-amd64"
-      sha256 "f04e870f5cd44bafd3c476cd841b84abb6e6f2c624214cdb78674e620e635fc4"
+      url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/matchlock-linux-amd64"
+      sha256 "9371969be04d36a0c3f78b794064b1eb5681db8ce7353b979457bd24c0e73e6f"
 
       resource "guest-init" do
-        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.1/guest-init-linux-amd64"
-        sha256 "c541512ce9ceb126699c014de9f366d79183d9a35df3f25358d1c1dcd5fcbaa9"
+        url "https://github.com/jingkaihe/matchlock/releases/download/v0.2.5/guest-init-linux-amd64"
+        sha256 "342008595d406cb7a04ea56a50399222361e0d7c8c6def7c69eb88f1a308f740"
       end
     end
   end
