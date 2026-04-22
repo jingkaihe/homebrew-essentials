@@ -1,25 +1,25 @@
 class GoogleWorkspaceMcp < Formula
   desc "MCP server for Google Workspace services"
   homepage "https://github.com/jingkaihe/google-workspace-mcp"
-  version "0.1.2-beta"
+  version "0.1.4-beta"
   
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.2-beta/google-workspace-mcp-darwin-arm64"
-      sha256 "2ea943ba37f580c0971dd1c1e38913d0ce542fce99ac3e8f28f8998157bbf066"
+      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.4-beta/google-workspace-mcp-darwin-arm64"
+      sha256 "dda78d93d172cac4fc448ac62a63e5874201e693ae8691adffe8148b72c2d99a"
     else
-      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.2-beta/google-workspace-mcp-darwin-amd64"
-      sha256 "4e0a2c270e679cf647f39726e3c077bc6669771dad1c89cf3ed3b42f54d916d6"
+      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.4-beta/google-workspace-mcp-darwin-amd64"
+      sha256 "0dc5986373ab2ababf54dbacebb5809972739f492ab4b946310a553052e3a8e6"
     end
   end
   
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.2-beta/google-workspace-mcp-linux-arm64"
-      sha256 "b6208347912a24da85c7f1a7c0971210d3c7fdca9f302eb3e393279a76fcbb40"
+      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.4-beta/google-workspace-mcp-linux-arm64"
+      sha256 "b818ced200a7634b50743b833d14476fccf2fea926e19c297f941f9f55a47ad7"
     else
-      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.2-beta/google-workspace-mcp-linux-amd64"
-      sha256 "7de1a5c286e42723814e3ce714d80ab32815eb7a05158a2b4a0425b2291ef887"
+      url "https://github.com/jingkaihe/google-workspace-mcp/releases/download/v0.1.4-beta/google-workspace-mcp-linux-amd64"
+      sha256 "da05d5539dbb201e2a4243ffeeaa0eb42d7472b9360485076c546b8271a3c178"
     end
   end
 
