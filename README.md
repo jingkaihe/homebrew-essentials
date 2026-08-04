@@ -13,6 +13,7 @@ brew install matchlock
 brew install waitrose
 brew install icloud
 brew install google-workspace-mcp
+brew install thirdspace
 ```
 
 Or install directly:
@@ -22,6 +23,7 @@ brew install jingkaihe/essentials/matchlock
 brew install jingkaihe/essentials/waitrose
 brew install jingkaihe/essentials/icloud
 brew install jingkaihe/essentials/google-workspace-mcp
+brew install jingkaihe/essentials/thirdspace
 ```
 
 ## Available Formulas
@@ -75,15 +77,27 @@ CLI for interacting with iCloud services.
   icloud mail list
   ```
 
+### thirdspace
+
+Unofficial CLI and TUI for browsing and booking Third Space gym classes.
+
+- **Repository**: https://github.com/jingkaihe/thirdspace
+- **Usage**:
+  ```bash
+  thirdspace --help
+  thirdspace login --email you@example.com
+  thirdspace classes
+  ```
+
 ## Updating
 
 To update to the latest versions:
 
 ```bash
 brew update
-brew upgrade matchlock waitrose icloud google-workspace-mcp
+brew upgrade matchlock waitrose icloud google-workspace-mcp thirdspace
 ```
 
 ## About
 
-This tap is automatically maintained. Formulas are updated whenever new releases are published to their respective repositories.
+Formulas are updated as new releases are published to their respective repositories.

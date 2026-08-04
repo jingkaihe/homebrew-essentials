@@ -1,0 +1,84 @@
+name: Update Third Space Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish without the leading v; defaults to the latest release"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-thirdspace-formula
+  cancel-in-progress: false
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Resolve release version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          VERSION="${INPUT_VERSION#v}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(gh release list --repo jingkaihe/thirdspace --limit 1 --json tagName --jq '.[0].tagName' | sed 's/^v//')
+          fi
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$'; then
+            echo "Invalid version: $VERSION" >&2
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Get release checksums
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "v$VERSION" --repo jingkaihe/thirdspace --pattern checksums.txt
+
+          set_checksum() {
+            filename="$1"
+            variable="$2"
+            checksum=$(awk -v filename="$filename" '$2 == filename { print $1 }' checksums.txt)
+            if ! printf '%s' "$checksum" | grep -Eq '^[0-9a-f]{64}$'; then
+              echo "Missing or invalid checksum for $filename" >&2
+              exit 1
+            fi
+            echo "$variable=$checksum" >> "$GITHUB_ENV"
+          }
+
+          set_checksum "thirdspace_${VERSION}_darwin_arm64.tar.gz" SHA256_DARWIN_ARM64
+          set_checksum "thirdspace_${VERSION}_darwin_amd64.tar.gz" SHA256_DARWIN_AMD64
+          set_checksum "thirdspace_${VERSION}_linux_arm64.tar.gz" SHA256_LINUX_ARM64
+          set_checksum "thirdspace_${VERSION}_linux_amd64.tar.gz" SHA256_LINUX_AMD64
+
+      - name: Generate formula
+        run: |
+          sed \
+            -e "s/{{VERSION}}/$VERSION/g" \
+            -e "s/{{SHA256_DARWIN_ARM64}}/$SHA256_DARWIN_ARM64/g" \
+            -e "s/{{SHA256_DARWIN_AMD64}}/$SHA256_DARWIN_AMD64/g" \
+            -e "s/{{SHA256_LINUX_ARM64}}/$SHA256_LINUX_ARM64/g" \
+            -e "s/{{SHA256_LINUX_AMD64}}/$SHA256_LINUX_AMD64/g" \
+            thirdspace-template.rb > Formula/thirdspace.rb
+          ruby -c Formula/thirdspace.rb
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/thirdspace.rb
+
+          if git diff --cached --quiet; then
+            echo "Formula is already current"
+          else
+            git commit -m "Update thirdspace formula to version $VERSION"
+            git push
+          fi
