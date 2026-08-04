@@ -1,7 +1,6 @@
 class Thirdspace < Formula
   desc "Browse and book Third Space gym classes"
   homepage "https://github.com/jingkaihe/thirdspace"
-  version "{{VERSION}}"
   license "MIT"
 
   on_macos do
