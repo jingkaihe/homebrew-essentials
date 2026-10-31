@@ -5,21 +5,21 @@ class Thirdspace < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.0/thirdspace_0.1.0_darwin_arm64.tar.gz"
-      sha256 "bfae03c213528b9a7882853d1848426e74e1c8cc3f1c86f41daf210b99c2a5e5"
+      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.1/thirdspace_0.1.1_darwin_arm64.tar.gz"
+      sha256 "14c68aeded899daf66dd9a50441e2a451fabbf84816b9641bbc72323d1d879a1"
     else
-      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.0/thirdspace_0.1.0_darwin_amd64.tar.gz"
-      sha256 "e2a6c1d8b4a2f4ebba0c89497c32b049b44a4e2993385b0a94fbbaa9a38a2775"
+      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.1/thirdspace_0.1.1_darwin_amd64.tar.gz"
+      sha256 "0b3cde69c6a749b823c669c5e2b236aa539c529807d561320604f21d9e84b7c1"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.0/thirdspace_0.1.0_linux_arm64.tar.gz"
-      sha256 "446834f56d618a5c60119e989b38389c2923a44c2fbfb1ad146a0a3624079fa6"
+      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.1/thirdspace_0.1.1_linux_arm64.tar.gz"
+      sha256 "c067a09999a8a04ca55da86a48b22a712c4e32749306ff16c7fa4f131fc61fbb"
     else
-      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.0/thirdspace_0.1.0_linux_amd64.tar.gz"
-      sha256 "cf9a92f46ab89ad457193e0856a3d8f158ace80d07694a47be620fad921f6471"
+      url "https://github.com/jingkaihe/thirdspace/releases/download/v0.1.1/thirdspace_0.1.1_linux_amd64.tar.gz"
+      sha256 "a502a26a931a7ca48b807a0086f1822279591c01e0f8d7787e40956e8dd24216"
     end
   end
 
